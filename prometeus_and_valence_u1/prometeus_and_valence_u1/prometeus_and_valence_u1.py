@@ -37,9 +37,6 @@ from prometheus_client import start_http_server, Gauge
 prometheus_gauge_1 = Gauge('valence_battery_state_of_charge_1', 'Value of the 1st Valence battery state-of-charge as a percentage')
 prometheus_gauge_2 = Gauge('valence_battery_state_of_charge_2', 'Value of the 2nd Valence battery state-of-charge as a percentage')
 prometheus_gauge_3 = Gauge('valence_battery_state_of_charge_3', 'Value of the 3rd Valence battery state-of-charge as a percentage')
-# prometheus_gauge_1.set(0)
-# prometheus_gauge_2.set(0)
-# prometheus_gauge_3.set(0)
 
 
 class PrometheusAndValenceU1(Node):
@@ -51,11 +48,10 @@ class PrometheusAndValenceU1(Node):
 
         self.battery_percentages = {} # Dictionary to store battery percentages
 
-        self.subscription = self.create_subscription(BatteryState, '/bmu_1/battery_state', self.battery1_state_callback, 10)
-        self.subscription = self.create_subscription(BatteryState, '/bmu_2/battery_state', self.battery2_state_callback, 10)
-        self.subscription = self.create_subscription(BatteryState, '/bmu_3/battery_state', self.battery3_state_callback, 10)
+        self.create_subscription(BatteryState, '/bmu_1/battery_state', self.battery1_state_callback, 10)
+        self.create_subscription(BatteryState, '/bmu_2/battery_state', self.battery2_state_callback, 10)
+        self.create_subscription(BatteryState, '/bmu_3/battery_state', self.battery3_state_callback, 10)
 
-        self.subscription  # prevent unused variable warning
 
 def battery1_state_callback(self, msg):
     self.battery_percentages[1] = msg.percentage
@@ -70,7 +66,7 @@ def battery3_state_callback(self, msg):
     prometheus_gauge_3.set(msg.percentage)
 
 def main(args=None):
-    start_http_server(9001)
+    start_http_server(9100)
 
     rclpy.init(args=args)
     prometeus_and_valence_u1 = PrometheusAndValenceU1()
