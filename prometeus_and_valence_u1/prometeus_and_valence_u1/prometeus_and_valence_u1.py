@@ -46,7 +46,7 @@ class PrometheusAndValenceU1(Node):
     def __init__(self):
         super().__init__('PrometheusAndValenceU1')
 
-        self.declare_parameter('port', 9001)
+        self.declare_parameter('port', 9100)
         self.baud = self.get_parameter('port').get_parameter_value().integer_value
 
         self.battery_percentages = {} # Dictionary to store battery percentages

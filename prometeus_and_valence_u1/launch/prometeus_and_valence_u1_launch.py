@@ -7,7 +7,7 @@ def generate_launch_description():
     executable='prometeus_and_valence_u1',
     parameters=[
       {
-        'port': 9001
+        'port': 9100
       }
     ]
   )
