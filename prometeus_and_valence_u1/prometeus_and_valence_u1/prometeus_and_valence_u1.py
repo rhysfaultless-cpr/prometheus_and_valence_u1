@@ -37,9 +37,6 @@ from prometheus_client import start_http_server, Gauge
 prometheus_gauge_1 = Gauge('valence_battery_state_of_charge_1', 'Value of the 1st Valence battery state-of-charge as a percentage')
 prometheus_gauge_2 = Gauge('valence_battery_state_of_charge_2', 'Value of the 2nd Valence battery state-of-charge as a percentage')
 prometheus_gauge_3 = Gauge('valence_battery_state_of_charge_3', 'Value of the 3rd Valence battery state-of-charge as a percentage')
-# prometheus_gauge_1.set(0)
-# prometheus_gauge_2.set(0)
-# prometheus_gauge_3.set(0)
 
 
 class PrometheusAndValenceU1(Node):
