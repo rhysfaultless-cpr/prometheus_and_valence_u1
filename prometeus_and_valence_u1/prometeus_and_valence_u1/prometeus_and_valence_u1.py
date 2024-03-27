@@ -52,18 +52,17 @@ class PrometheusAndValenceU1(Node):
         self.create_subscription(BatteryState, '/bmu_2/battery_state', self.battery2_state_callback, 10)
         self.create_subscription(BatteryState, '/bmu_3/battery_state', self.battery3_state_callback, 10)
 
+    def battery1_state_callback(self, msg):
+        self.battery_percentages[1] = msg.percentage
+        prometheus_gauge_1.set(msg.percentage)
 
-def battery1_state_callback(self, msg):
-    self.battery_percentages[1] = msg.percentage
-    prometheus_gauge_1.set(msg.percentage)
+    def battery2_state_callback(self, msg):
+        self.battery_percentages[2] = msg.percentage
+        prometheus_gauge_2.set(msg.percentage)
 
-def battery2_state_callback(self, msg):
-    self.battery_percentages[2] = msg.percentage
-    prometheus_gauge_2.set(msg.percentage)
-
-def battery3_state_callback(self, msg):
-    self.battery_percentages[3] = msg.percentage
-    prometheus_gauge_3.set(msg.percentage)
+    def battery3_state_callback(self, msg):
+        self.battery_percentages[3] = msg.percentage
+        prometheus_gauge_3.set(msg.percentage)
 
 def main(args=None):
     start_http_server(9100)
