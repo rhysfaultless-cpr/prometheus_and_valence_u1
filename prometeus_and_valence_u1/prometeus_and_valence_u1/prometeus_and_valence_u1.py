@@ -70,7 +70,7 @@ def battery3_state_callback(self, msg):
     prometheus_gauge_3.set(msg.percentage)
 
 def main(args=None):
-    start_http_server(9001)
+    start_http_server(9100)
 
     rclpy.init(args=args)
     prometeus_and_valence_u1 = PrometheusAndValenceU1()
