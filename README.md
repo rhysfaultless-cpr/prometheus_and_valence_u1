@@ -13,8 +13,9 @@
 
 1.  Configure and start the Prometheus server.
 2.  Add this repository to *~/ros2_ws/src*.
-3.  Build the workspace
-4.  Source the workspace
-5.  Launch the node with the command 
-
-    ```ros2 launch prometheus_and_valence_u1 prometheus_and_valence_u1.py```
+3.  Build the workspace.
+4.  Source the workspace.
+5.  Launch the node with the command:
+```
+ros2 launch prometheus_and_valence_u1 prometheus_and_valence_u1.py
+```
