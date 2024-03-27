@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>prometeus_and_valence_u1</name>
+  <version>0.0.1</version>
+  <description>Measure air velocity in cm/s with a Sparkfun FS3000-1015 sensor</description>
+  <maintainer email="rfaultless@clearpathrobotics.com">Rhys Faultless</maintainer>
+  <license>BSD</license>
+
+  <depend>rclpy</depend>
+  
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>
