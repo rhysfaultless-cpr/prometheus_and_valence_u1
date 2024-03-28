@@ -31,6 +31,7 @@
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import BatteryState
+from std_msgs.msg import Bool
 
 
 from prometheus_client import start_http_server, Gauge
@@ -46,6 +47,8 @@ prometheus_gauge_voltage_1 = Gauge('valence_battery_voltage_1', 'Value of the 1s
 prometheus_gauge_voltage_2 = Gauge('valence_battery_voltage_2', 'Value of the 2nd Valence battery voltage')
 prometheus_gauge_voltage_3 = Gauge('valence_battery_voltage_3', 'Value of the 3rd Valence battery voltage')
 
+prometheus_gauge_relay = Gauge('battery_charger_state_on_off', 'State of the battery charger, On is charging, Off is not charging')
+
 
 class PrometheusAndValenceU1(Node):
     def __init__(self):
@@ -57,6 +60,7 @@ class PrometheusAndValenceU1(Node):
         self.create_subscription(BatteryState, '/bmu_1/battery_state', self.battery1_state_callback, 10)
         self.create_subscription(BatteryState, '/bmu_2/battery_state', self.battery2_state_callback, 10)
         self.create_subscription(BatteryState, '/bmu_3/battery_state', self.battery3_state_callback, 10)
+        self.create_subscription(Bool, '/numato_relay_state_0', self.relay_state_callback, 10)
 
     def battery1_state_callback(self, msg):
         prometheus_gauge_soc_1.set(round(msg.percentage, 2))
@@ -72,6 +76,10 @@ class PrometheusAndValenceU1(Node):
         prometheus_gauge_soc_3.set(round(msg.percentage, 2))
         prometheus_gauge_current_3.set(round(msg.current, 2))
         prometheus_gauge_voltage_3.set(round(msg.voltage, 2))
+
+    def relay_state_callback(self, msg):
+        prometheus_gauge_relay.set(msg) # this may be missing a msg.metric
+
 
 def main(args=None):
     start_http_server(9100)
