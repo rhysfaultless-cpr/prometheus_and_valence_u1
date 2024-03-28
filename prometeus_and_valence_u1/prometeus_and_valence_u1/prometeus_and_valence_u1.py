@@ -78,7 +78,10 @@ class PrometheusAndValenceU1(Node):
         prometheus_gauge_voltage_3.set(round(msg.voltage, 2))
 
     def relay_state_callback(self, msg):
-        prometheus_gauge_relay.set(msg) # this may be missing a msg.metric
+        if msg == True:
+            prometheus_gauge_relay.set(1) 
+        else:
+            prometheus_gauge_relay.set(0)
 
 
 def main(args=None):
