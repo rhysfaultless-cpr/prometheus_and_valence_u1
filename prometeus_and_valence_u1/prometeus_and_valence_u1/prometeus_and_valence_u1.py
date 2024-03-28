@@ -46,22 +46,17 @@ class PrometheusAndValenceU1(Node):
         self.declare_parameter('port', 9100)
         self.baud = self.get_parameter('port').get_parameter_value().integer_value
 
-        self.battery_percentages = {} # Dictionary to store battery percentages
-
         self.create_subscription(BatteryState, '/bmu_1/battery_state', self.battery1_state_callback, 10)
         self.create_subscription(BatteryState, '/bmu_2/battery_state', self.battery2_state_callback, 10)
         self.create_subscription(BatteryState, '/bmu_3/battery_state', self.battery3_state_callback, 10)
 
     def battery1_state_callback(self, msg):
-        self.battery_percentages[1] = msg.percentage
         prometheus_gauge_soc_1.set(msg.percentage)
 
     def battery2_state_callback(self, msg):
-        self.battery_percentages[2] = msg.percentage
         prometheus_gauge_soc_2.set(msg.percentage)
 
     def battery3_state_callback(self, msg):
-        self.battery_percentages[3] = msg.percentage
         prometheus_gauge_soc_3.set(msg.percentage)
 
 def main(args=None):
