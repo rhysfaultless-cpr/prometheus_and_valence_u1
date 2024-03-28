@@ -31,12 +31,23 @@
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import BatteryState
+from std_msgs.msg import Bool
 
 
 from prometheus_client import start_http_server, Gauge
-prometheus_gauge_1 = Gauge('valence_battery_state_of_charge_1', 'Value of the 1st Valence battery state-of-charge as a percentage')
-prometheus_gauge_2 = Gauge('valence_battery_state_of_charge_2', 'Value of the 2nd Valence battery state-of-charge as a percentage')
-prometheus_gauge_3 = Gauge('valence_battery_state_of_charge_3', 'Value of the 3rd Valence battery state-of-charge as a percentage')
+prometheus_gauge_soc_1 = Gauge('valence_battery_state_of_charge_1', 'Value of the 1st Valence battery state-of-charge as a percentage')
+prometheus_gauge_soc_2 = Gauge('valence_battery_state_of_charge_2', 'Value of the 2nd Valence battery state-of-charge as a percentage')
+prometheus_gauge_soc_3 = Gauge('valence_battery_state_of_charge_3', 'Value of the 3rd Valence battery state-of-charge as a percentage')
+
+prometheus_gauge_current_1 = Gauge('valence_battery_current_1', 'Value of the 1st Valence battery current')
+prometheus_gauge_current_2 = Gauge('valence_battery_current_2', 'Value of the 2nd Valence battery current')
+prometheus_gauge_current_3 = Gauge('valence_battery_current_3', 'Value of the 3rd Valence battery current')
+
+prometheus_gauge_voltage_1 = Gauge('valence_battery_voltage_1', 'Value of the 1st Valence battery voltage')
+prometheus_gauge_voltage_2 = Gauge('valence_battery_voltage_2', 'Value of the 2nd Valence battery voltage')
+prometheus_gauge_voltage_3 = Gauge('valence_battery_voltage_3', 'Value of the 3rd Valence battery voltage')
+
+prometheus_gauge_relay = Gauge('battery_charger_state_on_off', 'State of the battery charger, On is charging, Off is not charging')
 
 
 class PrometheusAndValenceU1(Node):
@@ -46,23 +57,32 @@ class PrometheusAndValenceU1(Node):
         self.declare_parameter('port', 9100)
         self.baud = self.get_parameter('port').get_parameter_value().integer_value
 
-        self.battery_percentages = {} # Dictionary to store battery percentages
-
         self.create_subscription(BatteryState, '/bmu_1/battery_state', self.battery1_state_callback, 10)
         self.create_subscription(BatteryState, '/bmu_2/battery_state', self.battery2_state_callback, 10)
         self.create_subscription(BatteryState, '/bmu_3/battery_state', self.battery3_state_callback, 10)
+        self.create_subscription(Bool, '/numato_relay_state_0', self.relay_state_callback, 10)
 
     def battery1_state_callback(self, msg):
-        self.battery_percentages[1] = msg.percentage
-        prometheus_gauge_1.set(msg.percentage)
+        prometheus_gauge_soc_1.set(round(msg.percentage, 2))
+        prometheus_gauge_current_1.set(round(msg.current, 2))
+        prometheus_gauge_voltage_1.set(round(msg.voltage, 2))
 
     def battery2_state_callback(self, msg):
-        self.battery_percentages[2] = msg.percentage
-        prometheus_gauge_2.set(msg.percentage)
+        prometheus_gauge_soc_2.set(round(msg.percentage, 2))
+        prometheus_gauge_current_2.set(round(msg.current, 2))
+        prometheus_gauge_voltage_2.set(round(msg.voltage, 2))
 
     def battery3_state_callback(self, msg):
-        self.battery_percentages[3] = msg.percentage
-        prometheus_gauge_3.set(msg.percentage)
+        prometheus_gauge_soc_3.set(round(msg.percentage, 2))
+        prometheus_gauge_current_3.set(round(msg.current, 2))
+        prometheus_gauge_voltage_3.set(round(msg.voltage, 2))
+
+    def relay_state_callback(self, msg):
+        if msg == True:
+            prometheus_gauge_relay.set(1) 
+        else:
+            prometheus_gauge_relay.set(0)
+
 
 def main(args=None):
     start_http_server(9100)
