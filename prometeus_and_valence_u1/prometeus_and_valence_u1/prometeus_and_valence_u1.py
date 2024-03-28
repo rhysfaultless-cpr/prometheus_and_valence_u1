@@ -51,12 +51,14 @@ class PrometheusAndValenceU1(Node):
         self.create_subscription(BatteryState, '/bmu_3/battery_state', self.battery3_state_callback, 10)
 
     def battery1_state_callback(self, msg):
-        prometheus_gauge_soc_1.set(msg.percentage)
+        prometheus_gauge_soc_1.set(round(msg.percentage, 2))
 
     def battery2_state_callback(self, msg):
+        prometheus_gauge_soc_2.set(round(msg.percentage, 2))
         prometheus_gauge_soc_2.set(msg.percentage)
 
     def battery3_state_callback(self, msg):
+        prometheus_gauge_soc_3.set(round(msg.percentage, 2))
         prometheus_gauge_soc_3.set(msg.percentage)
 
 def main(args=None):
