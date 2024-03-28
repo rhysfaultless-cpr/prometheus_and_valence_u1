@@ -42,6 +42,9 @@ prometheus_gauge_current_1 = Gauge('valence_battery_current_1', 'Value of the 1s
 prometheus_gauge_current_2 = Gauge('valence_battery_current_2', 'Value of the 2nd Valence battery current')
 prometheus_gauge_current_3 = Gauge('valence_battery_current_3', 'Value of the 3rd Valence battery current')
 
+prometheus_gauge_voltage_1 = Gauge('valence_battery_voltage_1', 'Value of the 1st Valence battery voltage')
+prometheus_gauge_voltage_2 = Gauge('valence_battery_voltage_2', 'Value of the 2nd Valence battery voltage')
+prometheus_gauge_voltage_3 = Gauge('valence_battery_voltage_3', 'Value of the 3rd Valence battery voltage')
 
 
 class PrometheusAndValenceU1(Node):
@@ -58,14 +61,17 @@ class PrometheusAndValenceU1(Node):
     def battery1_state_callback(self, msg):
         prometheus_gauge_soc_1.set(round(msg.percentage, 2))
         prometheus_gauge_current_1.set(round(msg.current, 2))
+        prometheus_gauge_voltage_1.set(round(msg.voltage, 2))
 
     def battery2_state_callback(self, msg):
         prometheus_gauge_soc_2.set(round(msg.percentage, 2))
         prometheus_gauge_current_2.set(round(msg.current, 2))
+        prometheus_gauge_voltage_2.set(round(msg.voltage, 2))
 
     def battery3_state_callback(self, msg):
         prometheus_gauge_soc_3.set(round(msg.percentage, 2))
         prometheus_gauge_current_3.set(round(msg.current, 2))
+        prometheus_gauge_voltage_3.set(round(msg.voltage, 2))
 
 def main(args=None):
     start_http_server(9100)
