@@ -34,9 +34,9 @@ from sensor_msgs.msg import BatteryState
 
 
 from prometheus_client import start_http_server, Gauge
-prometheus_gauge_1 = Gauge('valence_battery_state_of_charge_1', 'Value of the 1st Valence battery state-of-charge as a percentage')
-prometheus_gauge_2 = Gauge('valence_battery_state_of_charge_2', 'Value of the 2nd Valence battery state-of-charge as a percentage')
-prometheus_gauge_3 = Gauge('valence_battery_state_of_charge_3', 'Value of the 3rd Valence battery state-of-charge as a percentage')
+prometheus_gauge_soc_1 = Gauge('valence_battery_state_of_charge_1', 'Value of the 1st Valence battery state-of-charge as a percentage')
+prometheus_gauge_soc_2 = Gauge('valence_battery_state_of_charge_2', 'Value of the 2nd Valence battery state-of-charge as a percentage')
+prometheus_gauge_soc_3 = Gauge('valence_battery_state_of_charge_3', 'Value of the 3rd Valence battery state-of-charge as a percentage')
 
 
 class PrometheusAndValenceU1(Node):
@@ -54,15 +54,15 @@ class PrometheusAndValenceU1(Node):
 
     def battery1_state_callback(self, msg):
         self.battery_percentages[1] = msg.percentage
-        prometheus_gauge_1.set(msg.percentage)
+        prometheus_gauge_soc_1.set(msg.percentage)
 
     def battery2_state_callback(self, msg):
         self.battery_percentages[2] = msg.percentage
-        prometheus_gauge_2.set(msg.percentage)
+        prometheus_gauge_soc_2.set(msg.percentage)
 
     def battery3_state_callback(self, msg):
         self.battery_percentages[3] = msg.percentage
-        prometheus_gauge_3.set(msg.percentage)
+        prometheus_gauge_soc_3.set(msg.percentage)
 
 def main(args=None):
     start_http_server(9100)
